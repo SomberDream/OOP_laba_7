@@ -6,7 +6,7 @@ import ru.somber.laba_7.gui.figure.IFigure;
 public class TriangleFactory implements IFigureFactory {
 
     public IFigure createFigure() {
-        return new GUITriangle(0, 0, 0);
+        return new GUITriangle();
     }
 
 }

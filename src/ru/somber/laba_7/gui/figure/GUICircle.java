@@ -9,8 +9,8 @@ import ru.somber.laba_7.util.Vector2F;
  */
 public class GUICircle extends AbstractFigure {
 
-    public GUICircle(float size, double x, double y) {
-        super(size, x, y);
+    public GUICircle() {
+        super();
     }
 
 

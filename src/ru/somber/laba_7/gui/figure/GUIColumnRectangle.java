@@ -9,9 +9,8 @@ public class GUIColumnRectangle extends AABBFigure {
     private static final Vector2F templateVertexD = new Vector2F(-1F, 1.5F);
 
 
-    public GUIColumnRectangle(double x, double y, float size) {
-        super(x, y, size,
-              templateVertexA, templateVertexB,
+    public GUIColumnRectangle() {
+        super(templateVertexA, templateVertexB,
               templateVertexC, templateVertexD);
     }
 

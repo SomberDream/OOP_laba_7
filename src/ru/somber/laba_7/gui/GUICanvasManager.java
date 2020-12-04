@@ -9,6 +9,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
+import ru.somber.laba_7.gui.figure.GUIGroupFigure;
 import ru.somber.laba_7.gui.figure.IFigure;
 import ru.somber.laba_7.gui.figurefactory.IFigureFactory;
 import ru.somber.laba_7.util.Vector2F;
@@ -33,6 +34,8 @@ public class GUICanvasManager {
     private final IList<IFigure> strokeFigureList;
     /** Лист объектов, которые рисуются заполненными. */
     private final IList<IFigure> fillFigureList;
+    /** Список фигур типа сгруппированных фигур. */
+    private final IList<IFigure> groupFigureList;
 
     /** Флаг нажате ли клавиша CTRL. */
     private boolean isKeyCTRLPressed;
@@ -47,8 +50,10 @@ public class GUICanvasManager {
 
     public GUICanvasManager(Scene scene, Canvas canvas) {
         this.canvas = canvas;
-        strokeFigureList = new LinkedList<>();
-        fillFigureList = new LinkedList<>();
+
+        this.strokeFigureList = new LinkedList<>();
+        this.fillFigureList = new LinkedList<>();
+        this.groupFigureList = new LinkedList<>();
 
         //события клавиш обрабатывать для сцены, т.к. канвас не реагирует на события.
         scene.addEventHandler(KeyEvent.KEY_PRESSED, new KeyCTRLPressHandler<>());
@@ -82,26 +87,6 @@ public class GUICanvasManager {
         renderFillFigure();
     }
 
-    /**
-     * Применяет свойства к выделенным фигурам.
-     * Под свойствами подразумевается цвет и размер.
-     * После применения свойств перерисовывает кадр.
-     */
-    public void applyFigureProperty() {
-        if (fillFigureList.isEmpty()) {
-            return;
-        }
-
-        IIterator<IFigure> iterator = fillFigureList.getIterator();
-        do {
-            IFigure figure = iterator.currentElement();
-            figure.setSize(figureSize);
-            figure.setColor(figureColor);
-        } while (iterator.next());
-
-        renderFigures();
-    }
-
     public void setFigureFactory(IFigureFactory figureFactory) {
         this.figureFactory = figureFactory;
     }
@@ -130,6 +115,59 @@ public class GUICanvasManager {
         } while (iterator.next());
 
         renderFigures();
+    }
+
+    public void groupFillFigures() {
+        if (fillFigureList.isEmpty()) {
+            return;
+        }
+
+        GUIGroupFigure groupFigure = new GUIGroupFigure();
+        groupFigure.addToGroup(fillFigureList);
+
+        fillFigureList.clear();
+        fillFigureList.addLast(groupFigure);
+
+        groupFigureList.addLast(groupFigure);
+    }
+
+    public void ungroupFillFigures() {
+        if (fillFigureList.isEmpty() || groupFigureList.isEmpty()) {
+            return;
+        }
+
+        IList<IFigure> tempList = new LinkedList<>();
+
+        IIterator<IFigure> iterator = fillFigureList.getIterator();
+        do {
+            IFigure figure = iterator.currentElement();
+
+            if (groupFigureList.contains(figure)) {
+                IList<IFigure> innerFigureList = ((GUIGroupFigure) figure).getFigureList();
+
+                if (innerFigureList.isEmpty()) {
+                    continue;
+                }
+
+                IIterator<IFigure> iteratorInnerFigures = innerFigureList.getIterator();
+
+                do {
+                    IFigure innerFigure = iteratorInnerFigures.currentElement();
+
+                    tempList.addLast(innerFigure);
+                } while(iteratorInnerFigures.next());
+
+                fillFigureList.remove(figure);
+                groupFigureList.remove(figure);
+            }
+        } while (iterator.next());
+
+        iterator = tempList.getIterator();
+        do {
+            IFigure figure = iterator.currentElement();
+
+            fillFigureList.addLast(figure);
+        } while (iterator.next());
     }
 
 
@@ -294,6 +332,26 @@ public class GUICanvasManager {
         fillFigureList.clear();
     }
 
+    /**
+     * Применяет свойства к выделенным фигурам.
+     * Под свойствами подразумевается цвет и размер.
+     * После применения свойств перерисовывает кадр.
+     */
+    private void applyFigureProperty() {
+        if (fillFigureList.isEmpty()) {
+            return;
+        }
+
+        IIterator<IFigure> iterator = fillFigureList.getIterator();
+        do {
+            IFigure figure = iterator.currentElement();
+            figure.setSize(figureSize);
+            figure.setColor(figureColor);
+        } while (iterator.next());
+
+        renderFigures();
+    }
+
 
     /**
      * Класс для обработки события нажатия на CTRL.
@@ -328,6 +386,16 @@ public class GUICanvasManager {
         @Override
         public void handle(T event) {
             if (event.getCode() == KeyCode.DELETE) {
+                if (fillFigureList.isEmpty()) {
+                    return;
+                }
+
+                IIterator<IFigure> iterator = fillFigureList.getIterator();
+                do {
+                    IFigure figure = iterator.currentElement();
+                    groupFigureList.remove(figure);
+                } while(iterator.next());
+
                 fillFigureList.clear();
                 renderFigures();
             }
@@ -353,10 +421,9 @@ public class GUICanvasManager {
                 if (figure == null) {
                     figure = figureFactory.createFigure();
 
-                    figure.setX(x);
-                    figure.setY(y);
                     figure.setSize(figureSize);
                     figure.setColor(figureColor);
+                    figure.move(x, y);
 
                     allFillFigureToStrokeFigure();
                     addFillFigure(figure);
@@ -367,8 +434,8 @@ public class GUICanvasManager {
 
             renderFigures();
         }
-    }
 
+    }
 
     /**
      * Класс для обработки событий нажатия на клавиши сдвига фигур.
@@ -392,6 +459,6 @@ public class GUICanvasManager {
                 moveFigures(LEFT_OFFSET);
             }
         }
-    }
 
+    }
 }

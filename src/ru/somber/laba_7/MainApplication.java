@@ -75,14 +75,17 @@ public class MainApplication extends Application {
 
         VBox chooseFigureLayout = new VBox();
         VBox controlFigureLayout = new VBox();
+        VBox controlGroupFigureLayout = new VBox();
 
         prepareChooseFigureLayout(chooseFigureLayout);
         prepareControlFigureLayout(controlFigureLayout);
+        prepareControlGroupFigureLayout(controlGroupFigureLayout);
 
         TitledPane chooseFigurePane = new TitledPane("Choose figure type", chooseFigureLayout);
         TitledPane controlFigurePane = new TitledPane("Change figure property", controlFigureLayout);
+        TitledPane controlGroupFigurePane = new TitledPane("Group/Ungroup figure", controlGroupFigureLayout);
 
-        layout.getChildren().addAll(chooseFigurePane, controlFigurePane);
+        layout.getChildren().addAll(chooseFigurePane, controlFigurePane, controlGroupFigurePane);
         return layout;
     }
 
@@ -172,6 +175,21 @@ public class MainApplication extends Application {
                                     figureRedLabel, figureRedSlider,
                                     figureGreenLabel, figureGreenSlider,
                                     figureBlueLabel, figureBlueSlider);
+    }
+
+    private void prepareControlGroupFigureLayout(VBox layout) {
+        Button createGroupButton = new Button("Create group");
+        Button deleteGroupButton = new Button("Delete group");
+
+        createGroupButton.setOnAction((event) -> {
+            canvasManager.groupFillFigures();
+        });
+
+        deleteGroupButton.setOnAction((event) -> {
+            canvasManager.ungroupFillFigures();
+        });
+
+        layout.getChildren().addAll(createGroupButton, deleteGroupButton);
     }
 
     public static void main(String[] args) {

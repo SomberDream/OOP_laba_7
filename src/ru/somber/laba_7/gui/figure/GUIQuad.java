@@ -9,9 +9,8 @@ public class GUIQuad extends AABBFigure {
     private static final Vector2F templateVertexD = new Vector2F(-1, 1);
 
 
-    public GUIQuad(double x, double y, float size) {
-        super(x, y, size,
-              templateVertexA, templateVertexB,
+    public GUIQuad() {
+        super(templateVertexA, templateVertexB,
               templateVertexC, templateVertexD);
     }
 

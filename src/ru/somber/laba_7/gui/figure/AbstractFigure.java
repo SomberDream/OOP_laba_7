@@ -12,6 +12,10 @@ public abstract class AbstractFigure implements IFigure {
     private Color color;
 
 
+    public AbstractFigure() {
+        this(0, 0, 0);
+    }
+
     public AbstractFigure(float size, double x, double y) {
         this.size = size;
         this.x = x;

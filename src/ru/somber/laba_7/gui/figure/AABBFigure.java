@@ -17,11 +17,10 @@ public class AABBFigure extends AbstractFigure {
     private final Vector2F templateVertexD;
 
 
-    public AABBFigure(double x, double y, float size,
-                      Vector2F templateVertexA, Vector2F templateVertexB,
+    public AABBFigure(Vector2F templateVertexA, Vector2F templateVertexB,
                       Vector2F templateVertexC, Vector2F templateVertexD) {
 
-        super(size, x, y);
+        super();
 
         this.templateVertexA = templateVertexA;
         this.templateVertexB = templateVertexB;

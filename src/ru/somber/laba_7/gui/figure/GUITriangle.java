@@ -14,9 +14,10 @@ public class GUITriangle extends AbstractFigure {
     private static final Vector2F templateVertexC = new Vector2F(-1, 1);
 
 
-    public GUITriangle(double x, double y, float size) {
-        super(size, x, y);
+    public GUITriangle() {
+        super();
     }
+
 
     @Override
     public void move(double xOffset, double yOffset) {

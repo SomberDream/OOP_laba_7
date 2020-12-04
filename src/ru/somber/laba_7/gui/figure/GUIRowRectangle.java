@@ -9,9 +9,8 @@ public class GUIRowRectangle extends AABBFigure {
     private static final Vector2F templateVertexD = new Vector2F(-1.5F, 1F);
 
 
-    public GUIRowRectangle(double x, double y, float size) {
-        super(x, y, size,
-              templateVertexA, templateVertexB,
+    public GUIRowRectangle() {
+        super(templateVertexA, templateVertexB,
               templateVertexC, templateVertexD);
     }
 
