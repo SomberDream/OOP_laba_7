@@ -117,6 +117,9 @@ public class GUICanvasManager {
         renderFigures();
     }
 
+    /**
+     * Производит группировку выделенных фигур.
+     */
     public void groupFillFigures() {
         if (fillFigureList.isEmpty()) {
             return;
@@ -131,6 +134,9 @@ public class GUICanvasManager {
         groupFigureList.addLast(groupFigure);
     }
 
+    /**
+     * Производит разгруппировку выделенных фигур.
+     */
     public void ungroupFillFigures() {
         if (fillFigureList.isEmpty() || groupFigureList.isEmpty()) {
             return;
