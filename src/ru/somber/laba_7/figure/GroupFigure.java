@@ -1,4 +1,4 @@
-package ru.somber.laba_7.gui.figure;
+package ru.somber.laba_7.figure;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
@@ -6,7 +6,7 @@ import ru.somber.laba_7.list.IIterator;
 import ru.somber.laba_7.list.IList;
 import ru.somber.laba_7.list.LinkedList;
 
-public class GUIGroupFigure implements IFigure {
+public class GroupFigure implements IFigure {
 
     /** Относительные координаты группы фигур. */
     private double x, y;
@@ -26,7 +26,7 @@ public class GUIGroupFigure implements IFigure {
     private IList<IFigure> figureList;
 
 
-    public GUIGroupFigure() {
+    public GroupFigure() {
         figureList = new LinkedList<>();
     }
 

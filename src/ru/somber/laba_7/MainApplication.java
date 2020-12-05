@@ -10,13 +10,12 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import ru.somber.laba_7.gui.GUICanvasManager;
-import ru.somber.laba_7.gui.figurefactory.*;
+import ru.somber.laba_7.figurefactory.*;
 
 public class MainApplication extends Application {
 
     private Scene rootScene;
-    private GUICanvasManager canvasManager;
+    private CanvasManager canvasManager;
 
 
     public MainApplication() {
@@ -60,12 +59,12 @@ public class MainApplication extends Application {
     private Pane createCanvasLayout() {
         VBox layout = new VBox();
 
-        Canvas canvas = new Canvas(GUICanvasManager.WIDTH_CANVAS, GUICanvasManager.HEIGHT_CANVAS);
+        Canvas canvas = new Canvas(CanvasManager.WIDTH_CANVAS, CanvasManager.HEIGHT_CANVAS);
 
         layout.getChildren().add(canvas);
         VBox.setVgrow(canvas, Priority.ALWAYS);
 
-        canvasManager = new GUICanvasManager(rootScene, canvas);
+        canvasManager = new CanvasManager(rootScene, canvas);
 
         return layout;
     }

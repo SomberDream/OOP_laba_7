@@ -1,4 +1,4 @@
-package ru.somber.laba_7.gui;
+package ru.somber.laba_7;
 
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -9,15 +9,15 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
-import ru.somber.laba_7.gui.figure.GUIGroupFigure;
-import ru.somber.laba_7.gui.figure.IFigure;
-import ru.somber.laba_7.gui.figurefactory.IFigureFactory;
+import ru.somber.laba_7.figure.GroupFigure;
+import ru.somber.laba_7.figure.IFigure;
+import ru.somber.laba_7.figurefactory.IFigureFactory;
 import ru.somber.laba_7.util.Vector2F;
 import ru.somber.laba_7.list.IIterator;
 import ru.somber.laba_7.list.IList;
 import ru.somber.laba_7.list.LinkedList;
 
-public class GUICanvasManager {
+public class CanvasManager {
     //ширина и высота канваса.
     public static final int WIDTH_CANVAS = 800;
     public static final int HEIGHT_CANVAS = 600;
@@ -48,7 +48,7 @@ public class GUICanvasManager {
     private Color figureColor;
 
 
-    public GUICanvasManager(Scene scene, Canvas canvas) {
+    public CanvasManager(Scene scene, Canvas canvas) {
         this.canvas = canvas;
 
         this.strokeFigureList = new LinkedList<>();
@@ -125,7 +125,7 @@ public class GUICanvasManager {
             return;
         }
 
-        GUIGroupFigure groupFigure = new GUIGroupFigure();
+        GroupFigure groupFigure = new GroupFigure();
         groupFigure.addToGroup(fillFigureList);
 
         fillFigureList.clear();
@@ -149,7 +149,7 @@ public class GUICanvasManager {
             IFigure figure = iterator.currentElement();
 
             if (groupFigureList.contains(figure)) {
-                IList<IFigure> innerFigureList = ((GUIGroupFigure) figure).getFigureList();
+                IList<IFigure> innerFigureList = ((GroupFigure) figure).getFigureList();
 
                 if (innerFigureList.isEmpty()) {
                     continue;

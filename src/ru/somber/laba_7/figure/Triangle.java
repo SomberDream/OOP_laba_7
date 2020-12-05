@@ -1,4 +1,4 @@
-package ru.somber.laba_7.gui.figure;
+package ru.somber.laba_7.figure;
 
 import javafx.scene.canvas.GraphicsContext;
 import ru.somber.laba_7.util.Util;
@@ -8,13 +8,13 @@ import ru.somber.laba_7.util.Vector2F;
  * Треугольник задается предустановленными вершинами. Их координаты можно увидеть в templateVertex*.
  * Размер треугольника - масштабирование этих предустановленных вершин.
  */
-public class GUITriangle extends AbstractFigure {
+public class Triangle extends AbstractFigure {
     private static final Vector2F templateVertexA = new Vector2F(0, -1);
     private static final Vector2F templateVertexB = new Vector2F(1, 1);
     private static final Vector2F templateVertexC = new Vector2F(-1, 1);
 
 
-    public GUITriangle() {
+    public Triangle() {
         super();
     }
 

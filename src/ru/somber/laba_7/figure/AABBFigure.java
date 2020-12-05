@@ -1,4 +1,4 @@
-package ru.somber.laba_7.gui.figure;
+package ru.somber.laba_7.figure;
 
 import javafx.scene.canvas.GraphicsContext;
 import ru.somber.laba_7.util.Util;

@@ -1,4 +1,4 @@
-package ru.somber.laba_7.gui.figure;
+package ru.somber.laba_7.figure;
 
 import javafx.scene.canvas.GraphicsContext;
 import ru.somber.laba_7.util.Util;
@@ -7,9 +7,9 @@ import ru.somber.laba_7.util.Vector2F;
 /**
  * Размер круга это его радуис.
  */
-public class GUICircle extends AbstractFigure {
+public class Circle extends AbstractFigure {
 
-    public GUICircle() {
+    public Circle() {
         super();
     }
 

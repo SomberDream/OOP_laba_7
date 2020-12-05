@@ -1,6 +1,6 @@
 package ru.somber.laba_7.util;
 
-import ru.somber.laba_7.gui.GUICanvasManager;
+import ru.somber.laba_7.CanvasManager;
 
 public class Util {
 
@@ -44,10 +44,10 @@ public class Util {
      */
     public static Vector2F checkOutOfBorderCanvas(Vector2F point) {
         int leftBorder = 0;
-        int rightBorder = GUICanvasManager.WIDTH_CANVAS - 1;
+        int rightBorder = CanvasManager.WIDTH_CANVAS - 1;
 
         int topBorder = 0;
-        int bottomBorder = GUICanvasManager.HEIGHT_CANVAS - 1;
+        int bottomBorder = CanvasManager.HEIGHT_CANVAS - 1;
 
         Vector2F resultOffset = new Vector2F();
 
