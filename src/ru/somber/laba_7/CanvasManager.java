@@ -37,8 +37,6 @@ public class CanvasManager {
     private final IList<IFigure> strokeFigureList;
     /** Лист объектов, которые рисуются заполненными. */
     private final IList<IFigure> fillFigureList;
-    /** Список фигур типа сгруппированных фигур. */
-    private final IList<IFigure> groupFigureList;
     /** Фабрика фигур. С помощью этой фабрики будут создаваться фигуры. */
     private final IFigureFactory figureFactory;
 
@@ -58,7 +56,6 @@ public class CanvasManager {
 
         this.strokeFigureList = new LinkedList<>();
         this.fillFigureList = new LinkedList<>();
-        this.groupFigureList = new LinkedList<>();
         this.figureFactory = new CommonFigureFactory();
 
         //события клавиш обрабатывать для сцены, т.к. канвас не реагирует на события.
@@ -126,15 +123,13 @@ public class CanvasManager {
 
         fillFigureList.clear();
         fillFigureList.addLast(groupFigure);
-
-        groupFigureList.addLast(groupFigure);
     }
 
     /**
      * Производит разгруппировку выделенных фигур.
      */
     public void ungroupFillFigures() {
-        if (fillFigureList.isEmpty() || groupFigureList.isEmpty()) {
+        if (fillFigureList.isEmpty()) {
             return;
         }
 
@@ -144,7 +139,7 @@ public class CanvasManager {
         do {
             IFigure figure = iterator.currentElement();
 
-            if (groupFigureList.contains(figure)) {
+            if (figure instanceof GroupFigure) {
                 IList<IFigure> innerFigureList = ((GroupFigure) figure).getFigureList();
 
                 if (innerFigureList.isEmpty()) {
@@ -160,7 +155,6 @@ public class CanvasManager {
                 } while(iteratorInnerFigures.next());
 
                 fillFigureList.remove(figure);
-                groupFigureList.remove(figure);
             }
         } while (iterator.next());
 
@@ -213,16 +207,11 @@ public class CanvasManager {
 
             strokeFigureList.clear();
             fillFigureList.clear();
-            groupFigureList.clear();
             if (! allFigureList.isEmpty()) {
                 IIterator<IFigure> iterator = allFigureList.getIterator();
                 do {
                     IFigure figure = iterator.currentElement();
                     strokeFigureList.addLast(figure);
-
-                    if (figure instanceof GroupFigure) {
-                        groupFigureList.addLast(figure);
-                    }
                 } while (iterator.next());
             }
         } catch (Exception e) {
@@ -451,12 +440,6 @@ public class CanvasManager {
                 if (fillFigureList.isEmpty()) {
                     return;
                 }
-
-                IIterator<IFigure> iterator = fillFigureList.getIterator();
-                do {
-                    IFigure figure = iterator.currentElement();
-                    groupFigureList.remove(figure);
-                } while(iterator.next());
 
                 fillFigureList.clear();
                 renderFigures();
