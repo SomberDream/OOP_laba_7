@@ -9,7 +9,7 @@ import ru.somber.laba_7.util.Vector2F;
  * В конструктор требуется передать 4 вектора с шаблонными вершинами фигурами.
  * На основе переданных вершин будут выводиться истинные вершины фигуры на основе ее размеров и позиции.
  */
-public class AABBFigure extends AbstractFigure {
+public abstract class AABBFigure extends AbstractFigure {
     //шаблонные вершины.
     private final Vector2F templateVertexA;
     private final Vector2F templateVertexB;

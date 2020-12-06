@@ -2,6 +2,8 @@ package ru.somber.laba_7.figure;
 
 import javafx.scene.paint.Color;
 
+import java.util.StringTokenizer;
+
 public abstract class AbstractFigure implements IFigure {
 
     /** Координаты центра фигуры. */
@@ -70,6 +72,39 @@ public abstract class AbstractFigure implements IFigure {
     }
 
     @Override
+    public String save() {
+        return String.join(" ", "{",
+                           getDescriptorForSave(),
+                           Integer.toString((int) x),
+                           Integer.toString((int) y),
+                           Integer.toString((int) size),
+                           Float.toString((float) color.getRed()),
+                           Float.toString((float) color.getGreen()),
+                           Float.toString((float) color.getBlue()),
+                           "}");
+    }
+
+    @Override
+    public void load(String record) {
+        StringTokenizer tokenizer = new StringTokenizer(record, " ");
+        tokenizer.nextToken();
+        tokenizer.nextToken();
+
+        int x = Integer.parseInt(tokenizer.nextToken());
+        int y = Integer.parseInt(tokenizer.nextToken());
+        int size = Integer.parseInt(tokenizer.nextToken());
+
+        float r = Float.parseFloat(tokenizer.nextToken());
+        float g = Float.parseFloat(tokenizer.nextToken());
+        float b = Float.parseFloat(tokenizer.nextToken());
+
+        this.x = x;
+        this.y = y;
+        this.size = size;
+        this.color = Color.color(r, g, b);
+    }
+
+    @Override
     public String toString() {
         return "AbstractFigure{" +
                 "x=" + x +
@@ -78,5 +113,8 @@ public abstract class AbstractFigure implements IFigure {
                 ", color=" + color +
                 '}';
     }
+
+
+    protected abstract String getDescriptorForSave();
 
 }

@@ -11,7 +11,10 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import ru.somber.laba_7.figure.GroupFigure;
 import ru.somber.laba_7.figure.IFigure;
+import ru.somber.laba_7.figurefactory.CommonFigureFactory;
 import ru.somber.laba_7.figurefactory.IFigureFactory;
+import ru.somber.laba_7.serialize.FigureSerializer;
+import ru.somber.laba_7.serialize.ISerializable;
 import ru.somber.laba_7.util.Vector2F;
 import ru.somber.laba_7.list.IIterator;
 import ru.somber.laba_7.list.IList;
@@ -36,12 +39,14 @@ public class CanvasManager {
     private final IList<IFigure> fillFigureList;
     /** Список фигур типа сгруппированных фигур. */
     private final IList<IFigure> groupFigureList;
+    /** Фабрика фигур. С помощью этой фабрики будут создаваться фигуры. */
+    private final IFigureFactory figureFactory;
 
     /** Флаг нажате ли клавиша CTRL. */
     private boolean isKeyCTRLPressed;
 
-    /** Фабрика фигур. С помощью этой фабрики будут создаваться фигуры. */
-    private IFigureFactory figureFactory;
+    /** Название фигуры, которые нужно создавать через фабрику. */
+    private String figureNameForCreate;
     /** Размер фигур. */
     private int figureSize = 50;
     /** Цвет фигур. */
@@ -54,6 +59,7 @@ public class CanvasManager {
         this.strokeFigureList = new LinkedList<>();
         this.fillFigureList = new LinkedList<>();
         this.groupFigureList = new LinkedList<>();
+        this.figureFactory = new CommonFigureFactory();
 
         //события клавиш обрабатывать для сцены, т.к. канвас не реагирует на события.
         scene.addEventHandler(KeyEvent.KEY_PRESSED, new KeyCTRLPressHandler<>());
@@ -77,18 +83,8 @@ public class CanvasManager {
         return figure;
     }
 
-    /**
-     * Отрисовывает все фигуры.
-     */
-    public void renderFigures() {
-        canvas.getGraphicsContext2D().clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
-
-        renderStrokeFigure();
-        renderFillFigure();
-    }
-
-    public void setFigureFactory(IFigureFactory figureFactory) {
-        this.figureFactory = figureFactory;
+    public void setFigureNameForCreate(String figureName) {
+        this.figureNameForCreate = figureName;
     }
 
     public void setFigureSize(int figureSize) {
@@ -174,6 +170,66 @@ public class CanvasManager {
 
             fillFigureList.addLast(figure);
         } while (iterator.next());
+    }
+
+    /**
+     * Отрисовывает все фигуры.
+     */
+    public void renderFigures() {
+        canvas.getGraphicsContext2D().clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+
+        renderStrokeFigure();
+        renderFillFigure();
+    }
+
+    public void saveFigures() {
+        IList<IFigure> allFigureList = new LinkedList<>();
+        FigureSerializer serializable = new FigureSerializer("figure_data.txt", figureFactory);
+
+        if (! strokeFigureList.isEmpty()) {
+            IIterator<IFigure> iterator = strokeFigureList.getIterator();
+            do {
+                IFigure figure = iterator.currentElement();
+                allFigureList.addLast(figure);
+            } while (iterator.next());
+        }
+
+        if (! fillFigureList.isEmpty()) {
+            IIterator<IFigure> iterator = fillFigureList.getIterator();
+            do {
+                IFigure figure = iterator.currentElement();
+                allFigureList.addLast(figure);
+            } while (iterator.next());
+        }
+
+        serializable.save(allFigureList);
+    }
+
+    public void loadFigures() {
+        try {
+            IList<IFigure> allFigureList;
+            FigureSerializer serializable = new FigureSerializer("figure_data.txt", figureFactory);
+            allFigureList = serializable.load();
+
+            strokeFigureList.clear();
+            fillFigureList.clear();
+            groupFigureList.clear();
+            if (! allFigureList.isEmpty()) {
+                IIterator<IFigure> iterator = allFigureList.getIterator();
+                do {
+                    IFigure figure = iterator.currentElement();
+                    strokeFigureList.addLast(figure);
+
+                    if (figure instanceof GroupFigure) {
+                        groupFigureList.addLast(figure);
+                    }
+                } while (iterator.next());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        renderFigures();
     }
 
 
@@ -425,7 +481,7 @@ public class CanvasManager {
                     allFillFigureToStrokeFigure();
                 }
                 if (figure == null) {
-                    figure = figureFactory.createFigure();
+                    figure = figureFactory.createFigure(figureNameForCreate);
 
                     figure.setSize(figureSize);
                     figure.setColor(figureColor);

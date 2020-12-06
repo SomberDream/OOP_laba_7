@@ -10,6 +10,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import ru.somber.laba_7.figure.*;
 import ru.somber.laba_7.figurefactory.*;
 
 public class MainApplication extends Application {
@@ -75,16 +76,19 @@ public class MainApplication extends Application {
         VBox chooseFigureLayout = new VBox();
         VBox controlFigureLayout = new VBox();
         VBox controlGroupFigureLayout = new VBox();
+        VBox controlSaveLoadFigureLayout = new VBox();
 
         prepareChooseFigureLayout(chooseFigureLayout);
         prepareControlFigureLayout(controlFigureLayout);
         prepareControlGroupFigureLayout(controlGroupFigureLayout);
+        prepareControlSaveLoadFiguresLayout(controlSaveLoadFigureLayout);
 
         TitledPane chooseFigurePane = new TitledPane("Choose figure type", chooseFigureLayout);
         TitledPane controlFigurePane = new TitledPane("Change figure property", controlFigureLayout);
         TitledPane controlGroupFigurePane = new TitledPane("Group/Ungroup figure", controlGroupFigureLayout);
+        TitledPane controlSaveLoadFigurePane = new TitledPane("Save/Load figure data", controlSaveLoadFigureLayout);
 
-        layout.getChildren().addAll(chooseFigurePane, controlFigurePane, controlGroupFigurePane);
+        layout.getChildren().addAll(chooseFigurePane, controlFigurePane, controlGroupFigurePane, controlSaveLoadFigurePane);
         return layout;
     }
 
@@ -96,23 +100,23 @@ public class MainApplication extends Application {
         RadioButton buttonColumnRectangle = new RadioButton("Column Rectangle");
 
         buttonCircle.setOnAction((event) -> {
-            canvasManager.setFigureFactory(new CircleFactory());
+            canvasManager.setFigureNameForCreate(Circle.getDescriptor());
         });
 
         buttonTriangle.setOnAction((event) -> {
-            canvasManager.setFigureFactory(new TriangleFactory());
+            canvasManager.setFigureNameForCreate(Triangle.getDescriptor());
         });
 
         buttonQuad.setOnAction((event) -> {
-            canvasManager.setFigureFactory(new QuadFactory());
+            canvasManager.setFigureNameForCreate(Quad.getDescriptor());
         });
 
         buttonRowRectangle.setOnAction((event) -> {
-            canvasManager.setFigureFactory(new RowRectangleFactory());
+            canvasManager.setFigureNameForCreate(RowRectangle.getDescriptor());
         });
 
         buttonColumnRectangle.setOnAction((event) -> {
-            canvasManager.setFigureFactory(new ColumnRectangleFactory());
+            canvasManager.setFigureNameForCreate(ColumnRectangle.getDescriptor());
         });
 
         ToggleGroup toggleGroup = new ToggleGroup();
@@ -125,7 +129,7 @@ public class MainApplication extends Application {
 
 
         buttonCircle.setSelected(true);
-        canvasManager.setFigureFactory(new CircleFactory());
+        canvasManager.setFigureNameForCreate(Circle.getDescriptor());
         layout.getChildren().addAll(buttonCircle, buttonTriangle, buttonQuad, buttonRowRectangle, buttonColumnRectangle);
     }
 
@@ -190,6 +194,22 @@ public class MainApplication extends Application {
 
         layout.getChildren().addAll(createGroupButton, deleteGroupButton);
     }
+
+    private void prepareControlSaveLoadFiguresLayout(VBox layout) {
+        Button saveButton = new Button("Save");
+        Button loadButton = new Button("Load");
+
+        saveButton.setOnAction((event) -> {
+            canvasManager.saveFigures();
+        });
+
+        loadButton.setOnAction((event) -> {
+            canvasManager.loadFigures();
+        });
+
+        layout.getChildren().addAll(saveButton, loadButton);
+    }
+
 
     public static void main(String[] args) {
         Application.launch(args);

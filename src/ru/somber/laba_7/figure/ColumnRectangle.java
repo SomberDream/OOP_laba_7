@@ -20,4 +20,13 @@ public class ColumnRectangle extends AABBFigure {
         return "GUIColumnRectangle{ " + super.toString() + "}";
     }
 
+    @Override
+    protected String getDescriptorForSave() {
+        return getDescriptor();
+    }
+
+
+    public static String getDescriptor() {
+        return "column_rectangle";
+    }
 }

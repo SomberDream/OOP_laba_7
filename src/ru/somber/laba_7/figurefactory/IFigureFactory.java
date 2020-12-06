@@ -4,6 +4,6 @@ import ru.somber.laba_7.figure.IFigure;
 
 public interface IFigureFactory {
 
-    IFigure createFigure();
+    IFigure createFigure(String figureName);
 
 }

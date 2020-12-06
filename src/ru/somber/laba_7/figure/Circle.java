@@ -69,4 +69,13 @@ public class Circle extends AbstractFigure {
         return "GUICircle{ " + super.toString() + "}";
     }
 
+    @Override
+    protected String getDescriptorForSave() {
+        return getDescriptor();
+    }
+
+    public static String getDescriptor() {
+        return "circle";
+    }
+
 }

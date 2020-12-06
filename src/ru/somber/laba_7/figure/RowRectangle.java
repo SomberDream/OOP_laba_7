@@ -20,4 +20,14 @@ public class RowRectangle extends AABBFigure {
         return "GUIRowRectangle{ " + super.toString() + "}";
     }
 
+    @Override
+    protected String getDescriptorForSave() {
+        return getDescriptor();
+    }
+
+
+    public static String getDescriptor() {
+        return "row_rectangle";
+    }
+
 }

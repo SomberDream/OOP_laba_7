@@ -20,4 +20,14 @@ public class Quad extends AABBFigure {
         return "GUIQuad{ " + super.toString() + "}";
     }
 
+    @Override
+    protected String getDescriptorForSave() {
+        return getDescriptor();
+    }
+
+
+    public static String getDescriptor() {
+        return "quad";
+    }
+
 }

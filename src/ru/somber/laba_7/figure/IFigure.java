@@ -2,8 +2,9 @@ package ru.somber.laba_7.figure;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import ru.somber.laba_7.serialize.ISerializable;
 
-public interface IFigure {
+public interface IFigure extends ISerializable {
 
     /**
      * Возвращает координату X фигуры.

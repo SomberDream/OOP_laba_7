@@ -109,4 +109,14 @@ public class Triangle extends AbstractFigure {
         return "GUITriangle{ " + super.toString() + "}";
     }
 
+    @Override
+    protected String getDescriptorForSave() {
+        return getDescriptor();
+    }
+
+
+    public static String getDescriptor() {
+        return "triangle";
+    }
+
 }

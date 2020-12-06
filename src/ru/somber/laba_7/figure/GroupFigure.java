@@ -2,6 +2,7 @@ package ru.somber.laba_7.figure;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import ru.somber.laba_7.figurefactory.IFigureFactory;
 import ru.somber.laba_7.list.IIterator;
 import ru.somber.laba_7.list.IList;
 import ru.somber.laba_7.list.LinkedList;
@@ -24,10 +25,17 @@ public class GroupFigure implements IFigure {
     private Color color;
     /** Список фигур в группе. */
     private IList<IFigure> figureList;
+    /** Фабрика фигур, с помощью которой будут создаваться загружаемые с помощью load() фигуры. */
+    private IFigureFactory figureFactory;
 
 
     public GroupFigure() {
-        figureList = new LinkedList<>();
+        this(null);
+    }
+
+    public GroupFigure(IFigureFactory figureFactory) {
+        this.figureList = new LinkedList<>();
+        this.figureFactory = figureFactory;
     }
 
 
@@ -191,6 +199,70 @@ public class GroupFigure implements IFigure {
         } while(iterator.next());
 
         return false;
+    }
+
+    @Override
+    public String save() {
+        String data = "{ " + getDescriptor() + " ";
+
+        if (! figureList.isEmpty()) {
+            IIterator<IFigure> iterator = figureList.getIterator();
+            do {
+                IFigure figure = iterator.currentElement();
+                String figureData = figure.save();
+
+                data += figureData + " ";
+            } while (iterator.next());
+        }
+
+        data += "}";
+        return data;
+    }
+
+    @Override
+    public void load(String record) {
+
+        IList<String> records = new LinkedList<>();
+
+        int countOpenBrace = 0;
+        int firstIndexOfRecord = -1;
+        for (int i = record.indexOf("{", 1); i < record.length(); i++) {
+            char character = record.charAt(i);
+
+            if (character == '{') {
+                countOpenBrace++;
+                if (countOpenBrace == 1) {
+                    firstIndexOfRecord = i;
+                }
+            } else if (character == '}') {
+                countOpenBrace--;
+                if (countOpenBrace == 0) {
+                    String subRecord = record.substring(firstIndexOfRecord, i + 1);
+                    records.addLast(subRecord);
+                }
+            }
+        }
+
+        if (! records.isEmpty()) {
+            IIterator<String> iterator = records.getIterator();
+            do {
+                String subRecord = iterator.currentElement();
+
+                int startIndex = subRecord.indexOf(" ");
+                int endIndex = subRecord.indexOf(" ", startIndex + 1);
+                String nameOfFigure = subRecord.substring(startIndex + 1, endIndex);
+
+                IFigure figure = figureFactory.createFigure(nameOfFigure);
+                figure.load(subRecord);
+
+                figureList.addLast(figure);
+            } while (iterator.next());
+        }
+
+    }
+
+    public static String getDescriptor() {
+        return "group_figure";
     }
 
 }
