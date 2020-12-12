@@ -80,22 +80,34 @@ public class CanvasManager {
         return figure;
     }
 
+    /**
+     * Устанавливает название фигур, которые должны создаваться при соответствующих событиях.
+     */
     public void setFigureNameForCreate(String figureName) {
         this.figureNameForCreate = figureName;
     }
 
+    /**
+     * Устанавливает размер для всех выделенных фигур и для фигур, которые далее будут создаваться.
+     */
     public void setFigureSize(int figureSize) {
         this.figureSize = figureSize;
 
         applyFigureProperty();
     }
 
+    /**
+     * Устанавливает цвет для всех выделенных фигур и для фигур, которые далее будут создаваться.
+     */
     public void setFigureColor(Color figureColor) {
         this.figureColor = figureColor;
 
         applyFigureProperty();
     }
 
+    /**
+     * Двигает выделенные фигуры на переданный вектор.
+     */
     public void moveFigures(Vector2F offsets) {
         if (fillFigureList.isEmpty()) {
             return;
@@ -176,6 +188,9 @@ public class CanvasManager {
         renderFillFigure();
     }
 
+    /**
+     * Производит сохранение фигур на внешний файл через сериализатор фигур.
+     */
     public void saveFigures() {
         IList<IFigure> allFigureList = new LinkedList<>();
         FigureSerializer serializable = new FigureSerializer("figure_data.txt", figureFactory);
@@ -199,6 +214,9 @@ public class CanvasManager {
         serializable.save(allFigureList);
     }
 
+    /**
+     * Производит загруку фигур с внешенго файла через сериализатор фигур.
+     */
     public void loadFigures() {
         try {
             IList<IFigure> allFigureList;

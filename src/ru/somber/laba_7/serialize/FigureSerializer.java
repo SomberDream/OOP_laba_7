@@ -1,4 +1,4 @@
-package ru.somber.laba_7.serialize;
+ package ru.somber.laba_7.serialize;
 
 import ru.somber.laba_7.figure.IFigure;
 import ru.somber.laba_7.figurefactory.IFigureFactory;
@@ -9,13 +9,22 @@ import ru.somber.laba_7.list.LinkedList;
 import java.io.*;
 import java.util.Scanner;
 
+/**
+ * Сериализатор фигур.
+ * Может загружать/сохранять списки объектов по указанному адресу файла с данными фигур.
+ * Для создания фигур при загрузке используется переданная фабрика фигур.
+ */
 public class FigureSerializer {
 
-    private String pathToFile;
-    private File file;
-    private IFigureFactory figureFactory;
+    private final String pathToFile;
+    private final File file;
+    private final IFigureFactory figureFactory;
 
 
+    /**
+     * @param pathToFile путь до файла с данными фигур.
+     * @param figureFactory фабрика фигур, с помощью которой будут создаваться фигуры при их загрузке с файла.
+     */
     public FigureSerializer(String pathToFile, IFigureFactory figureFactory) {
         this.pathToFile = pathToFile;
         this.file = new File(pathToFile);
@@ -23,6 +32,10 @@ public class FigureSerializer {
     }
 
 
+    /**
+     * Загружает фигуры из файла с данными фигур и возвращает список загруженных фигур.
+     * Фигуры создаются с помощью переданной при создании сериализатора фабрики фигур.
+     */
     public IList<IFigure> load() throws IOException {
         IList<IFigure> loadedFigureList = new LinkedList<>();
 
@@ -39,7 +52,9 @@ public class FigureSerializer {
         return loadedFigureList;
     }
 
-
+    /**
+     * Сохраняет переданный список фигур в файл с данными фигур.
+     */
     public void save(IList<IFigure> figureList) {
         StringBuilder resultStringBuilder = new StringBuilder();
 
@@ -61,7 +76,17 @@ public class FigureSerializer {
         }
     }
 
+    @Override
+    public String toString() {
+        return "FigureSerializer{" +
+                "pathToFile='" + pathToFile + '\'' +
+                '}';
+    }
 
+
+    /**
+     * Создает фигуру и заполняет ее данными из переданной записи с данными фигуры.
+     */
     public static IFigure loadFigureFromRecord(String record, IFigureFactory figureFactory) {
         if (record.contains("{")) {
             int indexFirstSpace = record.indexOf(" ");

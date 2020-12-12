@@ -106,12 +106,18 @@ public class GroupFigure implements IFigure {
     }
 
 
+    /**
+     * Добавляет переданную фигуру в группу.
+     */
     public void addToGroup(IFigure figure) {
         if (! figureList.contains(figure)) {
             figureList.addLast(figure);
         }
     }
 
+    /**
+     * Дабавляет переданный список фигур в объект группы фигур.
+     */
     public void addToGroup(IList<IFigure> figures) {
         if (figures.isEmpty()) {
             return;
@@ -121,15 +127,21 @@ public class GroupFigure implements IFigure {
 
         do {
             IFigure figure = iterator.currentElement();
-            figureList.addLast(figure);
+            addToGroup(figure);
         } while(iterator.next());
     }
 
+    /**
+     * Возвращает список фигур, которые хранятся в группе.
+     */
     public IList<IFigure> getFigureList() {
         return figureList;
     }
 
 
+    /**
+     * Двигает внутренние фигуры на переданные смещения.
+     */
     private void moveInnerFigures(double xOffset, double yOffset) {
         if (figureList.isEmpty()) {
             return;
@@ -143,6 +155,9 @@ public class GroupFigure implements IFigure {
         } while(iterator.next());
     }
 
+    /**
+     * Устанавливает переданный размер для внутренних фигур.
+     */
     private void setSizeInnerFigures(float size) {
         if (figureList.isEmpty()) {
             return;
@@ -156,6 +171,9 @@ public class GroupFigure implements IFigure {
         } while(iterator.next());
     }
 
+    /**
+     * Устанавливает переданный цвет для внутренних фигур.
+     */
     private void setColorInnerFigures(Color color) {
         if (figureList.isEmpty()) {
             return;
@@ -169,6 +187,9 @@ public class GroupFigure implements IFigure {
         } while(iterator.next());
     }
 
+    /**
+     * Производит отрисовку внутренних фигур для перданного графического констекста.
+     */
     private void renderInnerFigures(GraphicsContext gc, boolean isFill) {
         if (figureList.isEmpty()) {
             return;
@@ -182,6 +203,9 @@ public class GroupFigure implements IFigure {
         } while(iterator.next());
     }
 
+    /**
+     * Производит поиск переданной точка на попадание среди внутренних фигур.
+     */
     private boolean containsPointInInnerFigures(double x, double y) {
         if (figureList.isEmpty()) {
             return false;
@@ -260,6 +284,7 @@ public class GroupFigure implements IFigure {
         }
 
     }
+
 
     public static String getDescriptor() {
         return "group_figure";
